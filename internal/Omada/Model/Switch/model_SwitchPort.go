@@ -27,6 +27,12 @@ type SwitchPort struct {
 	Poe           bool
 	ReceiveBytes  int64
 	TransmitBytes int64
+
+	// PoE fields, filled from the site-wide poe-info report (model_SwitchPoe.go)
+	PoeSupported      bool
+	PoePowerWatts     float64
+	PoeVoltageVolts   float64
+	PoeCurrentAmperes float64
 }
 
 func (sp SwitchPort) GetID() string {
@@ -73,6 +79,41 @@ func (sp SwitchPort) GetInternetLatency() float64 {
 func (sp SwitchPort) GetInternetLoss() float64 {
 	return Enum.NotApplicable_Float
 }
+func (sp SwitchPort) GetPoeSupported() float64 {
+	if !sp.PoeSupported {
+		return 0
+	}
+	return 1
+}
+func (sp SwitchPort) GetPoePowerWatts() float64 {
+	if !sp.PoeSupported {
+		return Enum.NotApplicable_Float
+	}
+	return sp.PoePowerWatts
+}
+func (sp SwitchPort) GetPoeVoltageVolts() float64 {
+	if !sp.PoeSupported {
+		return Enum.NotApplicable_Float
+	}
+	return sp.PoeVoltageVolts
+}
+func (sp SwitchPort) GetPoeCurrentAmperes() float64 {
+	if !sp.PoeSupported {
+		return Enum.NotApplicable_Float
+	}
+	return sp.PoeCurrentAmperes
+}
+
+// applyPoeInfo copies one row of the poe-info report onto the port. The
+// controller reports the PoE current in milliamperes (150.0 mA at 52.9 V is
+// 7.9 W); the port stores and exposes amperes, so the value is scaled here.
+func (sp *SwitchPort) applyPoeInfo(row openApiSwitchPoePort) {
+	sp.PoeSupported = row.SupportPoe
+	sp.PoePowerWatts = row.Power
+	sp.PoeVoltageVolts = row.Voltage
+	sp.PoeCurrentAmperes = row.Current / 1000
+}
+
 func (sp *SwitchPort) merge(toMerge webApiSwitchPort) error {
 	if sp.Port != toMerge.Port {
 		return fmt.Errorf("cannot merge SwitchPort with different port numbers: %d != %d", sp.Port, toMerge.Port)

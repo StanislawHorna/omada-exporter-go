@@ -1,0 +1,18 @@
+# golangci-lint configuration (v2).
+#
+# The only enabled-by-default findings this repo had were errcheck reports on
+# two intentionally ignored error values; both are documented here instead of
+# being worked around at every call site.
+version: "2"
+
+linters:
+  settings:
+    errcheck:
+      exclude-functions:
+        # Closing a response body is best effort: there is nothing an operator
+        # could do with the error, and http.Client has already consumed it.
+        - (io.Closer).Close
+        # Log.Error returns its error so callers can either wrap it
+        # (`return Log.Error(err, ...)`) or log-and-continue. Ignoring the
+        # return is the log-and-continue form, not a dropped error.
+        - omada_exporter_go/internal/Log.Error

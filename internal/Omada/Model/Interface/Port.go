@@ -13,6 +13,14 @@ type Port interface {
 	GetTxBytes() float64
 	GetRxBytes() float64
 
+	// Getters for Power over Ethernet properties. They return -1
+	// (Enum.NotApplicable_Float) for ports of devices that do not report PoE at
+	// all, such as access point and gateway ports.
+	GetPoeSupported() float64
+	GetPoePowerWatts() float64
+	GetPoeVoltageVolts() float64
+	GetPoeCurrentAmperes() float64
+
 	// Getters for specific port properties
 	GetInternetState() float64
 	GetInternetLatency() float64

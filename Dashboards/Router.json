@@ -7,20 +7,6 @@
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
-    },
-    {
-      "name": "VAR_RATE_INTERVAL",
-      "type": "constant",
-      "label": "rate_interval",
-      "value": "6m",
-      "description": ""
-    },
-    {
-      "name": "VAR_DEVICE_TYPE",
-      "type": "constant",
-      "label": "device_type",
-      "value": "Gateway",
-      "description": ""
     }
   ],
   "__elements": {},
@@ -1817,20 +1803,35 @@
   "templating": {
     "list": [
       {
+        "allowCustomValue": true,
+        "current": {},
+        "definition": "label_values(omada_http_client_requests_total,job)",
+        "label": "Job",
+        "name": "job_name",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(omada_http_client_requests_total,job)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
         "hide": 2,
         "name": "rate_interval",
-        "query": "${VAR_RATE_INTERVAL}",
+        "query": "6m",
         "skipUrlSync": true,
         "type": "constant",
         "current": {
-          "value": "${VAR_RATE_INTERVAL}",
-          "text": "${VAR_RATE_INTERVAL}",
-          "selected": false
+          "value": "6m",
+          "text": "6m"
         },
         "options": [
           {
-            "value": "${VAR_RATE_INTERVAL}",
-            "text": "${VAR_RATE_INTERVAL}",
+            "value": "6m",
+            "text": "6m",
             "selected": false
           }
         ]
@@ -1839,18 +1840,17 @@
         "description": "",
         "hide": 2,
         "name": "device_type",
-        "query": "${VAR_DEVICE_TYPE}",
+        "query": "Gateway",
         "skipUrlSync": true,
         "type": "constant",
         "current": {
-          "value": "${VAR_DEVICE_TYPE}",
-          "text": "${VAR_DEVICE_TYPE}",
-          "selected": false
+          "value": "Gateway",
+          "text": "Gateway"
         },
         "options": [
           {
-            "value": "${VAR_DEVICE_TYPE}",
-            "text": "${VAR_DEVICE_TYPE}",
+            "value": "Gateway",
+            "text": "Gateway",
             "selected": false
           }
         ]
@@ -1858,14 +1858,14 @@
       {
         "allowCustomValue": false,
         "current": {},
-        "definition": "label_values(port_info{deviceType=\"$device_type\"},portID)",
+        "definition": "label_values(port_info{job=\"$job_name\", deviceType=\"$device_type\"},portID)",
         "hide": 2,
         "includeAll": true,
         "name": "port_ID",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(port_info{deviceType=\"$device_type\"},portID)",
+          "query": "label_values(port_info{job=\"$job_name\", deviceType=\"$device_type\"},portID)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -1875,13 +1875,13 @@
       },
       {
         "current": {},
-        "definition": "label_values(device_last_seen{job=\"Omada\"},device_name)",
+        "definition": "label_values(device_last_seen{job=\"$job_name\"},device_name)",
         "label": "Controler Name",
         "name": "device_name",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(device_last_seen{job=\"Omada\"},device_name)",
+          "query": "label_values(device_last_seen{job=\"$job_name\"},device_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,

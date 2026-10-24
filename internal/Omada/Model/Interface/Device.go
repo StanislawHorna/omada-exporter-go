@@ -19,7 +19,7 @@ type Device interface {
 	GetMemUsage() float64
 
 	GetTemperature() float64 // Returns -1 if temperature is not available
-	GetLastSeen() float64    // Returns the last seen timestamp in milliseconds
+	GetLastSeen() float64    // Returns the last seen timestamp as reported by the controller, in milliseconds (see Prometheus/Utils.UnixSeconds)
 	GetClientsCount() float64
 	GetUpgradeNeededStatus() float64
 

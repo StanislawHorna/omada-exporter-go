@@ -7,20 +7,6 @@
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
-    },
-    {
-      "name": "VAR_RATE_INTERVAL",
-      "type": "constant",
-      "label": "rate_interval",
-      "value": "6m",
-      "description": ""
-    },
-    {
-      "name": "VAR_DEVICE_TYPE",
-      "type": "constant",
-      "label": "device_type",
-      "value": "Switch",
-      "description": ""
     }
   ],
   "__elements": {},
@@ -579,6 +565,119 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 50,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "limit": 25,
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "port_poe_power_watts{deviceType=\"$device_type\", device_name=\"$device_name\", portID=\"$port_ID\"}\n  * on(macAddress, portID) group_left(portName)\nport_info{deviceType=\"$device_type\", device_name=\"$device_name\", portID=\"$port_ID\"}",
+          "format": "table",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Port $port_ID PoE",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": false,
+              "__name__": true,
+              "deviceType": true,
+              "device_name": true,
+              "disable": true,
+              "duplex": true,
+              "instance": true,
+              "internetState": true,
+              "ip": true,
+              "job": true,
+              "linkSpeed": false,
+              "linkStatus": true,
+              "mac": true,
+              "macAddress": true,
+              "mode": false,
+              "name": true,
+              "online": true,
+              "operation": true,
+              "poe": true,
+              "port": true,
+              "portDesc": false,
+              "portID": true,
+              "portMode": false,
+              "portName": false,
+              "profileName": true,
+              "protocol": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "linkSpeed": ""
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "palette-classic"
           },
           "custom": {
@@ -635,7 +734,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 20
       },
       "id": 44,
       "options": {
@@ -740,7 +839,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 29
       },
       "id": 45,
       "options": {
@@ -845,7 +944,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 38
       },
       "id": 2,
       "options": {
@@ -1005,7 +1104,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 44
+        "y": 48
       },
       "id": 22,
       "options": {
@@ -1138,7 +1237,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 44
+        "y": 48
       },
       "id": 46,
       "options": {
@@ -1186,20 +1285,35 @@
   "templating": {
     "list": [
       {
+        "allowCustomValue": true,
+        "current": {},
+        "definition": "label_values(omada_http_client_requests_total,job)",
+        "label": "Job",
+        "name": "job_name",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(omada_http_client_requests_total,job)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
         "hide": 2,
         "name": "rate_interval",
-        "query": "${VAR_RATE_INTERVAL}",
+        "query": "6m",
         "skipUrlSync": true,
         "type": "constant",
         "current": {
-          "value": "${VAR_RATE_INTERVAL}",
-          "text": "${VAR_RATE_INTERVAL}",
-          "selected": false
+          "value": "6m",
+          "text": "6m"
         },
         "options": [
           {
-            "value": "${VAR_RATE_INTERVAL}",
-            "text": "${VAR_RATE_INTERVAL}",
+            "value": "6m",
+            "text": "6m",
             "selected": false
           }
         ]
@@ -1208,18 +1322,17 @@
         "description": "",
         "hide": 2,
         "name": "device_type",
-        "query": "${VAR_DEVICE_TYPE}",
+        "query": "Switch",
         "skipUrlSync": true,
         "type": "constant",
         "current": {
-          "value": "${VAR_DEVICE_TYPE}",
-          "text": "${VAR_DEVICE_TYPE}",
-          "selected": false
+          "value": "Switch",
+          "text": "Switch"
         },
         "options": [
           {
-            "value": "${VAR_DEVICE_TYPE}",
-            "text": "${VAR_DEVICE_TYPE}",
+            "value": "Switch",
+            "text": "Switch",
             "selected": false
           }
         ]
@@ -1227,14 +1340,14 @@
       {
         "allowCustomValue": false,
         "current": {},
-        "definition": "label_values(port_info{deviceType=\"$device_type\"},portID)",
+        "definition": "label_values(port_info{job=\"$job_name\", deviceType=\"$device_type\"},portID)",
         "hide": 2,
         "includeAll": true,
         "name": "port_ID",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(port_info{deviceType=\"$device_type\"},portID)",
+          "query": "label_values(port_info{job=\"$job_name\", deviceType=\"$device_type\"},portID)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -1244,13 +1357,13 @@
       },
       {
         "current": {},
-        "definition": "query_result(scalar(max(max_over_time(port_speed{deviceType=\"$device_type\"}[$__range]))))",
+        "definition": "query_result(scalar(max(max_over_time(port_speed{job=\"$job_name\", deviceType=\"$device_type\"}[$__range]))))",
         "hide": 2,
         "name": "max_port_speed",
         "options": [],
         "query": {
           "qryType": 3,
-          "query": "query_result(scalar(max(max_over_time(port_speed{deviceType=\"$device_type\"}[$__range]))))",
+          "query": "query_result(scalar(max(max_over_time(port_speed{job=\"$job_name\", deviceType=\"$device_type\"}[$__range]))))",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -1259,13 +1372,13 @@
       },
       {
         "current": {},
-        "definition": "label_values(device_last_seen{job=\"Omada\"},device_name)",
+        "definition": "label_values(device_last_seen{job=\"$job_name\"},device_name)",
         "label": "Controler Name",
         "name": "device_name",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(device_last_seen{job=\"Omada\"},device_name)",
+          "query": "label_values(device_last_seen{job=\"$job_name\"},device_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,

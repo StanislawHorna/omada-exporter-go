@@ -18,7 +18,13 @@ type Config struct {
 	}
 	Prometheus struct {
 		MetricsPath string `env:"METRICS_PATH" envDefault:"/metrics"`
+		// MetricsHost is the listen address. Empty means all interfaces.
+		MetricsHost string `env:"METRICS_HOST" envDefault:""`
 		MetricsPort string `env:"METRICS_PORT" envDefault:"8080"`
+		// EnableClientMetrics exposes per-client series. It is opt-in because the
+		// client list costs one extra API request per scrape and produces one
+		// series set per associated client.
+		EnableClientMetrics bool `env:"ENABLE_CLIENT_METRICS" envDefault:"false"`
 	}
 	Loki struct {
 		LokiURL     string `env:"LOKI_URL"`

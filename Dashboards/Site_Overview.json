@@ -7,20 +7,6 @@
             "type": "datasource",
             "pluginId": "prometheus",
             "pluginName": "Prometheus"
-        },
-        {
-            "name": "VAR_JOB_NAME",
-            "type": "constant",
-            "label": "job_name",
-            "value": "Omada",
-            "description": ""
-        },
-        {
-            "name": "VAR_RATE_INTERVAL",
-            "type": "constant",
-            "label": "rate_interval",
-            "value": "6m",
-            "description": ""
         }
     ],
     "__elements": {},
@@ -748,8 +734,8 @@
                     },
                     {
                         "matcher": {
-                            "id": "byName",
-                            "options": "Last Seen"
+                            "id": "byRegexp",
+                            "options": "/Last[_ ]Seen/"
                         },
                         "properties": [
                             {
@@ -910,7 +896,7 @@
                     },
                     "editorMode": "code",
                     "exemplar": false,
-                    "expr": "device_last_seen{job=\"$job_name\"}",
+                    "expr": "device_last_seen{job=\"$job_name\"} * 1000",
                     "format": "table",
                     "hide": false,
                     "instant": true,
@@ -1040,23 +1026,20 @@
     "templating": {
         "list": [
             {
-                "hide": 2,
+                "allowCustomValue": true,
+                "current": {},
+                "definition": "label_values(omada_http_client_requests_total,job)",
+                "label": "Job",
                 "name": "job_name",
-                "query": "${VAR_JOB_NAME}",
-                "skipUrlSync": true,
-                "type": "constant",
-                "current": {
-                    "value": "${VAR_JOB_NAME}",
-                    "text": "${VAR_JOB_NAME}",
-                    "selected": false
+                "options": [],
+                "query": {
+                    "qryType": 1,
+                    "query": "label_values(omada_http_client_requests_total,job)",
+                    "refId": "PrometheusVariableQueryEditor-VariableQuery"
                 },
-                "options": [
-                    {
-                        "value": "${VAR_JOB_NAME}",
-                        "text": "${VAR_JOB_NAME}",
-                        "selected": false
-                    }
-                ]
+                "refresh": 1,
+                "regex": "",
+                "type": "query"
             },
             {
                 "allowCustomValue": false,
@@ -1077,18 +1060,17 @@
             {
                 "hide": 2,
                 "name": "rate_interval",
-                "query": "${VAR_RATE_INTERVAL}",
+                "query": "6m",
                 "skipUrlSync": true,
                 "type": "constant",
                 "current": {
-                    "value": "${VAR_RATE_INTERVAL}",
-                    "text": "${VAR_RATE_INTERVAL}",
-                    "selected": false
+                    "value": "6m",
+                    "text": "6m"
                 },
                 "options": [
                     {
-                        "value": "${VAR_RATE_INTERVAL}",
-                        "text": "${VAR_RATE_INTERVAL}",
+                        "value": "6m",
+                        "text": "6m",
                         "selected": false
                     }
                 ]

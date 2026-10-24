@@ -7,34 +7,6 @@
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
-    },
-    {
-      "name": "VAR_RATE_INTERVAL",
-      "type": "constant",
-      "label": "rate_interval",
-      "value": "6m",
-      "description": ""
-    },
-    {
-      "name": "VAR_DEVICE_TYPE",
-      "type": "constant",
-      "label": "device_type",
-      "value": "AccessPoint",
-      "description": ""
-    },
-    {
-      "name": "VAR_FREQ_5GHZ",
-      "type": "constant",
-      "label": "freq_5Ghz",
-      "value": "5.0 GHz",
-      "description": ""
-    },
-    {
-      "name": "VAR_FREQ_24GHZ",
-      "type": "constant",
-      "label": "freq_24Ghz",
-      "value": "2.4 GHz",
-      "description": ""
     }
   ],
   "__elements": {},
@@ -1353,20 +1325,35 @@
   "templating": {
     "list": [
       {
+        "allowCustomValue": true,
+        "current": {},
+        "definition": "label_values(omada_http_client_requests_total,job)",
+        "label": "Job",
+        "name": "job_name",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(omada_http_client_requests_total,job)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
         "hide": 2,
         "name": "rate_interval",
-        "query": "${VAR_RATE_INTERVAL}",
+        "query": "6m",
         "skipUrlSync": true,
         "type": "constant",
         "current": {
-          "value": "${VAR_RATE_INTERVAL}",
-          "text": "${VAR_RATE_INTERVAL}",
-          "selected": false
+          "value": "6m",
+          "text": "6m"
         },
         "options": [
           {
-            "value": "${VAR_RATE_INTERVAL}",
-            "text": "${VAR_RATE_INTERVAL}",
+            "value": "6m",
+            "text": "6m",
             "selected": false
           }
         ]
@@ -1374,18 +1361,17 @@
       {
         "hide": 2,
         "name": "device_type",
-        "query": "${VAR_DEVICE_TYPE}",
+        "query": "AccessPoint",
         "skipUrlSync": true,
         "type": "constant",
         "current": {
-          "value": "${VAR_DEVICE_TYPE}",
-          "text": "${VAR_DEVICE_TYPE}",
-          "selected": false
+          "value": "AccessPoint",
+          "text": "AccessPoint"
         },
         "options": [
           {
-            "value": "${VAR_DEVICE_TYPE}",
-            "text": "${VAR_DEVICE_TYPE}",
+            "value": "AccessPoint",
+            "text": "AccessPoint",
             "selected": false
           }
         ]
@@ -1393,18 +1379,17 @@
       {
         "hide": 2,
         "name": "freq_5Ghz",
-        "query": "${VAR_FREQ_5GHZ}",
+        "query": "5.0 GHz",
         "skipUrlSync": true,
         "type": "constant",
         "current": {
-          "value": "${VAR_FREQ_5GHZ}",
-          "text": "${VAR_FREQ_5GHZ}",
-          "selected": false
+          "value": "5.0 GHz",
+          "text": "5.0 GHz"
         },
         "options": [
           {
-            "value": "${VAR_FREQ_5GHZ}",
-            "text": "${VAR_FREQ_5GHZ}",
+            "value": "5.0 GHz",
+            "text": "5.0 GHz",
             "selected": false
           }
         ]
@@ -1412,31 +1397,30 @@
       {
         "hide": 2,
         "name": "freq_24Ghz",
-        "query": "${VAR_FREQ_24GHZ}",
+        "query": "2.4 GHz",
         "skipUrlSync": true,
         "type": "constant",
         "current": {
-          "value": "${VAR_FREQ_24GHZ}",
-          "text": "${VAR_FREQ_24GHZ}",
-          "selected": false
+          "value": "2.4 GHz",
+          "text": "2.4 GHz"
         },
         "options": [
           {
-            "value": "${VAR_FREQ_24GHZ}",
-            "text": "${VAR_FREQ_24GHZ}",
+            "value": "2.4 GHz",
+            "text": "2.4 GHz",
             "selected": false
           }
         ]
       },
       {
         "current": {},
-        "definition": "label_values(device_last_seen{job=\"Omada\"},device_name)",
+        "definition": "label_values(device_last_seen{job=\"$job_name\"},device_name)",
         "label": "Controller Name",
         "name": "device_name",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(device_last_seen{job=\"Omada\"},device_name)",
+          "query": "label_values(device_last_seen{job=\"$job_name\"},device_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,

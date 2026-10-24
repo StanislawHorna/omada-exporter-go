@@ -32,7 +32,9 @@ func (OpenApiAccessToken) Path(map[string]string) string {
 
 func (OpenApiAccessToken) Payload(data map[string]any) (any, error) {
 	var payload OpenApiTokenPayload
-	utils.MapToStruct(data, &payload)
+	if err := utils.MapToStruct(data, &payload); err != nil {
+		return nil, Log.Error(err, "Failed to build the OpenAPI token payload")
+	}
 	return payload, nil
 }
 

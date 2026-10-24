@@ -57,3 +57,17 @@ func (app AccessPointPort) GetInternetLatency() float64 {
 func (app AccessPointPort) GetInternetLoss() float64 {
 	return Enum.NotApplicable_Float
 }
+
+func (app AccessPointPort) GetPoeSupported() float64 {
+	// Access Point ports do not report Power over Ethernet
+	return Enum.NotApplicable_Float
+}
+func (app AccessPointPort) GetPoePowerWatts() float64 {
+	return Enum.NotApplicable_Float
+}
+func (app AccessPointPort) GetPoeVoltageVolts() float64 {
+	return Enum.NotApplicable_Float
+}
+func (app AccessPointPort) GetPoeCurrentAmperes() float64 {
+	return Enum.NotApplicable_Float
+}

@@ -57,7 +57,7 @@ var (
 	device_last_seen = promauto.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Name: "device_last_seen",
-			Help: "The last time the device was seen, in Unix timestamp format",
+			Help: "The last time the device was seen, as a Unix timestamp in seconds",
 		},
 		deviceIdentityLabels,
 	)
@@ -87,7 +87,9 @@ func ExposeDeviceMetrics(devices []Interface.Device) {
 
 		cpu_usage.With(identityLabels).Set(d.GetCpuUsage())
 		memory_usage.With(identityLabels).Set(d.GetMemUsage())
-		device_last_seen.With(identityLabels).Set(d.GetLastSeen())
+		// The controller reports lastSeen in milliseconds; the metric is in Unix
+		// seconds (see Utils.UnixSeconds for why the scale is detected).
+		device_last_seen.With(identityLabels).Set(Utils.UnixSeconds(d.GetLastSeen()))
 
 		device_clients_count.With(identityLabels).Set(d.GetClientsCount())
 		device_upgrade_needed.With(identityLabels).Set(d.GetUpgradeNeededStatus())

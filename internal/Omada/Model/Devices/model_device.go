@@ -13,6 +13,7 @@ type Device struct {
 	MacAddress string            `json:"mac"`
 	Name       string            `json:"name"`
 	Type       Enum.DeviceType   `json:"type"`
+	Subtype    string            `json:"subtype"`
 	Model      string            `json:"model"`
 	IP         string            `json:"ip"`
 	Uptime     string            `json:"uptime"`

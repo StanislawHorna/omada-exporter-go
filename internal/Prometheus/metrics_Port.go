@@ -91,6 +91,34 @@ var (
 		},
 		portIdentityLabels,
 	)
+	port_poe_supported = promauto.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "port_poe_supported",
+			Help: "Whether the port supports Power over Ethernet (0 = no, 1 = yes)",
+		},
+		portIdentityLabels,
+	)
+	port_poe_power_watts = promauto.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "port_poe_power_watts",
+			Help: "Power delivered to the powered device on the port in watts",
+		},
+		portIdentityLabels,
+	)
+	port_poe_voltage_volts = promauto.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "port_poe_voltage_volts",
+			Help: "Power over Ethernet voltage on the port in volts",
+		},
+		portIdentityLabels,
+	)
+	port_poe_current_amperes = promauto.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "port_poe_current_amperes",
+			Help: "Power over Ethernet current on the port in amperes",
+		},
+		portIdentityLabels,
+	)
 )
 
 func ExposePortMetrics(devices []Interface.Device) {
@@ -118,9 +146,34 @@ func ExposePortMetrics(devices []Interface.Device) {
 			}
 
 			setPortInfo(p, labels)
+			setPortPoe(p, labels)
 		}
 	}
 
+}
+
+// setPortPoe exposes the Power over Ethernet values of a port. Access point and
+// gateway ports do not report PoE at all and ports without PoE support have no
+// values, so their series are deleted instead of kept with a stale value
+// (mirroring setDeviceTemperature).
+func setPortPoe(port Interface.Port, labels prometheus.Labels) {
+	if supported := port.GetPoeSupported(); supported != Enum.NotApplicable_Float {
+		port_poe_supported.With(labels).Set(supported)
+	} else {
+		port_poe_supported.Delete(labels)
+	}
+
+	setPortPoeValue(port_poe_power_watts, port.GetPoePowerWatts(), labels)
+	setPortPoeValue(port_poe_voltage_volts, port.GetPoeVoltageVolts(), labels)
+	setPortPoeValue(port_poe_current_amperes, port.GetPoeCurrentAmperes(), labels)
+}
+
+func setPortPoeValue(gauge *prometheus.GaugeVec, value float64, labels prometheus.Labels) {
+	if value > Enum.NotApplicable_Float {
+		gauge.With(labels).Set(value)
+		return
+	}
+	gauge.Delete(labels)
 }
 
 func setPortInfo(port Interface.Port, labels prometheus.Labels) {

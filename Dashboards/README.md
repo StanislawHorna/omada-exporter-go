@@ -22,3 +22,7 @@
 ![image](/Pictures/AccessPoint_2.png)
 ![image](/Pictures/AccessPoint_3.png)
 ![image](/Pictures/AccessPoint_4.png)
+
+## [Client Overview](/Dashboards/Client_Overview.json)
+
+Requires `ENABLE_CLIENT_METRICS=true` on the exporter to expose the per-client series.

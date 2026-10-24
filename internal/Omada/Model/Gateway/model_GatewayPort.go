@@ -94,6 +94,20 @@ func (gp GatewayPort) GetInternetLoss() float64 {
 	}
 	return gp.Loss
 }
+func (gp GatewayPort) GetPoeSupported() float64 {
+	// Gateway ports do not report Power over Ethernet
+	return Enum.NotApplicable_Float
+}
+func (gp GatewayPort) GetPoePowerWatts() float64 {
+	return Enum.NotApplicable_Float
+}
+func (gp GatewayPort) GetPoeVoltageVolts() float64 {
+	return Enum.NotApplicable_Float
+}
+func (gp GatewayPort) GetPoeCurrentAmperes() float64 {
+	return Enum.NotApplicable_Float
+}
+
 func (gp *GatewayPort) merge(toMerge webApiGatewayPort) error {
 	if gp.Port != toMerge.Port {
 		return fmt.Errorf("cannot merge GatewayPort with different port numbers: %d != %d", gp.Port, toMerge.Port)

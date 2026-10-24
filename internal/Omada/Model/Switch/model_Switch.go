@@ -9,6 +9,11 @@ import (
 
 const path_OpenApiSwitch = "/openapi/v1/{omadaID}/sites/{siteID}/switches/{switchMac}"
 
+// Agile Series ("Easy Managed", model prefix ES) switches are served by a
+// dedicated endpoint. The generic path above answers errorCode -39742 for
+// them; conversely this path answers -39743 for non-Agile switches.
+const path_OpenApiEasyManagedSwitch = "/openapi/v1/{omadaID}/sites/{siteID}/switches/es/{switchMac}"
+
 // Implements Interface.Device
 type Switch struct {
 	DeviceType      Enum.DeviceType `json:"deviceType"`

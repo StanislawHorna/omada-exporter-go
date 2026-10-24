@@ -78,10 +78,11 @@ func newClient(baseURL string, username string, password string, siteName string
 			Transport: instrumentedTransport,
 		},
 	}
-	clientObject.Login()
-
+	// A failed login is not fatal: every request retries it, so report the reason once
+	// and let the caller keep the client.
+	loginErr := clientObject.Login()
 	if !clientObject.isLoggedIn() {
-		Log.Error(nil, "Failed to log in to Omada controller WebUI")
+		Log.Error(loginErr, "Failed to log in to Omada controller WebUI")
 		return clientObject
 	}
 

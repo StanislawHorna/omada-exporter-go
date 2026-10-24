@@ -23,7 +23,9 @@ func Get() (*[]Device, error) {
 	for i := range *result {
 		for _, webDevice := range webApiData {
 			if (*result)[i].MacAddress == webDevice.MacAddress {
-				(*result)[i].merge(webDevice)
+				if err := (*result)[i].merge(webDevice); err != nil {
+					Log.Error(err, "Failed to merge WebAPI data into device %s", (*result)[i].MacAddress)
+				}
 			}
 		}
 	}
